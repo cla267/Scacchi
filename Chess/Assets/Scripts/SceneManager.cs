@@ -6,8 +6,6 @@ public class SceneManager : MonoBehaviour
 {
     public GameObject panels;
 
-    int activePanel;
-
 #region PanelsVariables
     GameObject loadingPanel;
     GameObject mainMenuPanel;
@@ -23,7 +21,7 @@ public class SceneManager : MonoBehaviour
 
     void Update()
     {
-
+        
     }
 
     void LoadPanel(GameObject selected)
