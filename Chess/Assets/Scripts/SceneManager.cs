@@ -23,22 +23,20 @@ public class SceneManager : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.E))
-        {
-            loadingPanel.SetActive(true);
-        }
-        
-        Loading();
+
     }
 
-    void Loading()
+    void LoadPanel(GameObject selected)
     {
-        if(ActivePanel() == 1)
+        for(int i = 0; i < panels.transform.childCount; i++)
         {
-            mainMenuPanel.SetActive(false);
-            roomsPanel.SetActive(false);
-            settingsPanel.SetActive(false);
-            namePanel.SetActive(false);
+            if(selected.transform.GetSiblingIndex() == i)
+            {
+                selected.SetActive(true);
+            }else
+            {
+                panels.transform.GetChild(i).gameObject.SetActive(false);
+            }
         }
     }
 
