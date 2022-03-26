@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class SceneManager : MonoBehaviour
+public class SceneManager : MonoBehaviourPunCallbacks
 {
     public GameObject panels;
 
@@ -17,6 +18,8 @@ public class SceneManager : MonoBehaviour
     void Start() 
     {
         setPanels();
+        LoadPanel(loadingPanel);
+        PhotonNetwork.ConnectUsingSettings();
     }
 
     void Update()
@@ -36,6 +39,14 @@ public class SceneManager : MonoBehaviour
                 panels.transform.GetChild(i).gameObject.SetActive(false);
             }
         }
+    }
+    public override void OnConnectedToMaster()
+    {
+        PhotonNetwork.JoinLobby();
+    }
+    public override void OnJoinedLobby()
+    {
+        LoadPanel(namePanel);
     }
 
     public int ActivePanel()
