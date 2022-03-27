@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 using Photon.Pun;
+using Photon.Realtime;
 
-
-public class SceneManager : MonoBehaviourPunCallbacks
+public class MultiplayerManager : MonoBehaviourPunCallbacks
 {
     public GameObject panels;
 
-    [SerializeField] TMP_Text inputText;
-    Button inputButton;
+    [SerializeField] TMP_Text inputNameText;
+
+    [SerializeField] TMP_Text inputRoomText;
 
 #region PanelsVariables
     GameObject loadingPanel;
@@ -33,7 +35,7 @@ public class SceneManager : MonoBehaviourPunCallbacks
         if(ActivePanel() == 1){loadingPanel.GetComponent<Animator>().SetBool("isLoading", true);}
         else{loadingPanel.GetComponent<Animator>().SetBool("isLoading", false);}
 
-        if(inputText.text.Contains(" ")){namePanel.transform.GetChild(2).GetComponent<Button>().enabled = false;}
+        if(inputNameText.text.Contains(" ")){namePanel.transform.GetChild(2).GetComponent<Button>().enabled = false;}
         else{namePanel.transform.GetChild(2).GetComponent<Button>().enabled = true;}
     }
 
@@ -53,7 +55,28 @@ public class SceneManager : MonoBehaviourPunCallbacks
 
     public void EnterUsername()
     {
-        PhotonNetwork.NickName = inputText.text;
+        PhotonNetwork.NickName = inputNameText.text;
+        LoadPanel(mainMenuPanel);
+    }
+
+    public void GoBack()
+    {
+        LoadPanel(loadingPanel);
+        PhotonNetwork.Disconnect();
+    }
+
+    public void EnterRoomsMenu()
+    {
+        LoadPanel(roomsPanel);
+    }
+
+    public void EnterRoom()
+    {
+        PhotonNetwork.JoinRoom(inputRoomText.ToString());
+    }
+
+    public void BackToMenu()
+    {
         LoadPanel(mainMenuPanel);
     }
 
@@ -64,6 +87,24 @@ public class SceneManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         LoadPanel(namePanel);
+    }
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        if(message == "Game does not exist")
+        {
+            PhotonNetwork.CreateRoom(inputRoomText.ToString());
+        }else
+        {
+            Debug.LogError("Peter è stupido");
+        }
+    }
+    public override void OnJoinedRoom()
+    {
+        SceneManager.LoadScene(2);
     }
 
     public int ActivePanel()
