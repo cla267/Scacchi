@@ -1,11 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using Photon.Pun;
+
 
 public class SceneManager : MonoBehaviourPunCallbacks
 {
     public GameObject panels;
+
+    [SerializeField] TMP_Text inputText;
+    Button inputButton;
 
 #region PanelsVariables
     GameObject loadingPanel;
@@ -24,7 +30,11 @@ public class SceneManager : MonoBehaviourPunCallbacks
 
     void Update()
     {
-        
+        if(ActivePanel() == 1){loadingPanel.GetComponent<Animator>().SetBool("isLoading", true);}
+        else{loadingPanel.GetComponent<Animator>().SetBool("isLoading", false);}
+
+        if(inputText.text.Contains(" ")){namePanel.transform.GetChild(2).GetComponent<Button>().enabled = false;}
+        else{namePanel.transform.GetChild(2).GetComponent<Button>().enabled = true;}
     }
 
     void LoadPanel(GameObject selected)
@@ -40,6 +50,13 @@ public class SceneManager : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    public void EnterUsername()
+    {
+        PhotonNetwork.NickName = inputText.text;
+        LoadPanel(mainMenuPanel);
+    }
+
     public override void OnConnectedToMaster()
     {
         PhotonNetwork.JoinLobby();
