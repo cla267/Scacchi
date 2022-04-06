@@ -11,5 +11,6 @@ public class ProvaPerchèPietroèStupido : MonoBehaviour
     private void Update() 
     {
         int num = PhotonNetwork.PlayerList.Length;
+        text.text = num.ToString();
     }
 }
