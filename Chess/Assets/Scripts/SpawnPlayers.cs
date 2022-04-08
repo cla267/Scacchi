@@ -6,8 +6,6 @@ using Photon.Pun;
 public class SpawnPlayers : MonoBehaviourPunCallbacks
 {
     public GameObject playerPref;
-    public Transform slot1;
-    public Transform slot2;
 
     void Start()
     {
@@ -18,11 +16,11 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
     {
         if(PhotonNetwork.CountOfPlayers == 1)
         {
-            PhotonNetwork.Instantiate(playerPref.name, slot1.transform.position, Quaternion.identity);
+            PhotonNetwork.Instantiate(playerPref.name, Vector3.zero, Quaternion.identity);
         }
         else
         {
-            PhotonNetwork.Instantiate(playerPref.name, slot2.transform.position, Quaternion.identity);
+            PhotonNetwork.Instantiate(playerPref.name, Vector3.zero, Quaternion.identity);
         }
     }
 }

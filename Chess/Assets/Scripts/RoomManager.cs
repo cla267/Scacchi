@@ -21,15 +21,18 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     private void Update() 
     {
-        if(PhotonNetwork.CountOfPlayers != startPlayers)
+        if(startPlayers != PhotonNetwork.PlayerList.Length)
         {
             Debug.Log("Updating...");
+            startPlayers = PhotonNetwork.PlayerList.Length;
+            Debug.LogError(startPlayers);
         }
+
+        print(startPlayers);
     }
 
     public void SetPlayer()
     {
-        startPlayers = PhotonNetwork.CountOfPlayers;
         
         if(slot1.text.ToLower() == "null" || slot1.text.Length == 0f)
         {
@@ -38,6 +41,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         {
             photonView.RPC("Player2", RpcTarget.AllBuffered);
         }
+
+        startPlayers = PhotonNetwork.PlayerList.Length;
         
     }
 
