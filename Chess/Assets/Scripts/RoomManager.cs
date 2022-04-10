@@ -8,38 +8,36 @@ using Photon.Pun;
 public class RoomManager : MonoBehaviourPunCallbacks
 {
     int startPlayers;
-
-    public GameObject playerPref;
     
     public TMP_Text slot1;
     public TMP_Text slot2;
 
     private void Start() 
     {
-        SetPlayer();
+
     }
 
     private void Update() 
     {
+
+        SetChallenger();
+
         if(startPlayers != PhotonNetwork.PlayerList.Length)
         {
             Debug.Log("Updating...");
             startPlayers = PhotonNetwork.PlayerList.Length;
-            Debug.LogError(startPlayers);
         }
 
-        print(startPlayers);
     }
 
-    public void SetPlayer()
+    public void SetChallenger()
     {
-        
-        if(slot1.text.ToLower() == "null" || slot1.text.Length == 0f)
+        if(PhotonNetwork.PlayerList.Length <= 1)
         {
-            photonView.RPC("Player1", RpcTarget.AllBuffered);
+            SetPlayer.Set(slot1);
         } else 
         {
-            photonView.RPC("Player2", RpcTarget.AllBuffered);
+            SetPlayer.Set(slot2);
         }
 
         startPlayers = PhotonNetwork.PlayerList.Length;
